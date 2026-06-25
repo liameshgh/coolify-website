@@ -34,6 +34,61 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// ── AI Chat endpoint (OpenRouter / Gemma) ─────────────────────────────────
+const https = require('https');
+const SYSTEM_PROMPT = `Du bist der freundliche Assistent von Coolify, einem professionellen Klimatechnik-Unternehmen in Deutschland.
+Du beantwortest NUR Fragen zu Coolify-Dienstleistungen: Installation, Wartung, Reparatur und Beratung von Klimaanlagen.
+Kontaktdaten: E-Mail darvish.amir@gmx.de, Telefon 0176 12345678, Mo–Fr 08–18 Uhr, Sa 09–14 Uhr.
+Antworte kurz, freundlich und auf Deutsch (oder Englisch wenn der Nutzer Englisch schreibt). Maximal 3 Sätze.`;
+
+app.post('/api/chat', async (req, res) => {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'AI not configured' });
+
+  const { message, history = [] } = req.body || {};
+  if (!message) return res.status(400).json({ error: 'No message' });
+
+  const messages = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...history.slice(-6),
+    { role: 'user', content: message }
+  ];
+
+  const payload = JSON.stringify({
+    model: 'google/gemma-3-27b-it:free',
+    messages,
+    max_tokens: 256,
+    temperature: 0.7
+  });
+
+  try {
+    const reply = await new Promise((resolve, reject) => {
+      const r = https.request({
+        hostname: 'openrouter.ai',
+        path: '/api/v1/chat/completions',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+          'HTTP-Referer': 'https://coolify-website.vercel.app',
+          'X-Title': 'Coolify Chatbot'
+        }
+      }, (r2) => {
+        let data = '';
+        r2.on('data', c => data += c);
+        r2.on('end', () => {
+          try { resolve(JSON.parse(data).choices?.[0]?.message?.content || 'Keine Antwort.'); }
+          catch { reject(new Error('Parse error')); }
+        });
+      });
+      r.on('error', reject);
+      r.write(payload);
+      r.end();
+    });
+    res.json({ reply });
+  } catch { res.status(500).json({ error: 'AI request failed' }); }
+});
+
 // ── Contact form endpoint ──────────────────────────────────────────────────
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, message } = req.body;
