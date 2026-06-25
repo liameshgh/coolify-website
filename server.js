@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname)));
 const https = require('https');
 const SYSTEM_PROMPT = `Du bist der freundliche Assistent von Coolify, einem professionellen Klimatechnik-Unternehmen in Deutschland.
 Du beantwortest NUR Fragen zu Coolify-Dienstleistungen: Installation, Wartung, Reparatur und Beratung von Klimaanlagen.
-Kontaktdaten: E-Mail darvish.amir@gmx.de, Telefon 0176 12345678, Mo–Fr 08–18 Uhr, Sa 09–14 Uhr.
+Kontaktdaten: E-Mail shahram.nejati@gmal.com, Telefon 0176 12345678, Mo–Fr 08–18 Uhr, Sa 09–14 Uhr.
 Antworte kurz, freundlich und auf Deutsch (oder Englisch wenn der Nutzer Englisch schreibt). Maximal 3 Sätze.`;
 
 app.post('/api/chat', async (req, res) => {
