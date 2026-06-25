@@ -558,7 +558,7 @@ textarea.form-input{resize:vertical;min-height:120px}
               <div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
               <div>
                 <div class="contact-item-label" data-i18n="cinfo_email_label">E-Mail</div>
-                <a href="mailto:shahram.nejati@gmal.com" class="contact-item-value" style="color:var(--p)">shahram.nejati@gmal.com</a>
+                <a href="mailto:shahram.nejati@gmail.com" class="contact-item-value" style="color:var(--p)">shahram.nejati@gmail.com</a>
               </div>
             </div>
             <div class="contact-item">
@@ -616,7 +616,7 @@ textarea.form-input{resize:vertical;min-height:120px}
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer_contact">Kontakt</h4>
-        <a href="mailto:shahram.nejati@gmal.com">shahram.nejati@gmal.com</a>
+        <a href="mailto:shahram.nejati@gmail.com">shahram.nejati@gmail.com</a>
         <a href="tel:017612345678">0176 12345678</a>
       </div>
     </div>
@@ -680,7 +680,7 @@ const T = {
     showcase_indoor:"Innengerät",showcase_indoor_sub:"Wandmontage · Leise · Energieeffizient",
     showcase_outdoor:"Außengerät",showcase_outdoor_sub:"Kompressor · Wetterfest · Leistungsstark",
     showcase_indoor_hint:"Ihr Foto des Innengeräts hier",showcase_outdoor_hint:"Ihr Foto des Außengeräts hier",
-    showcase_note:"→ Senden Sie uns Ihre Bilder: shahram.nejati@gmal.com — wir aktualisieren die Galerie.",
+    showcase_note:"→ Senden Sie uns Ihre Bilder: shahram.nejati@gmail.com — wir aktualisieren die Galerie.",
     stat1:"Installationen",stat2:"Jahre Erfahrung",stat3:"Kundenzufriedenheit",stat4:"Notdienst",
     process_label:"So einfach geht's",process_title:"Ihr Weg zum perfekten Klima",
     p1_title:"Beratung",p1_desc:"Kostenlose Erstberatung — wir analysieren Ihre Räume und Anforderungen.",
@@ -719,7 +719,7 @@ const T = {
     showcase_indoor:"Indoor Unit",showcase_indoor_sub:"Wall Mounted · Silent · Energy Efficient",
     showcase_outdoor:"Outdoor Unit",showcase_outdoor_sub:"Compressor · Weatherproof · Powerful",
     showcase_indoor_hint:"Your indoor unit photo here",showcase_outdoor_hint:"Your outdoor unit photo here",
-    showcase_note:"→ Send us your photos: shahram.nejati@gmal.com — we'll update the gallery.",
+    showcase_note:"→ Send us your photos: shahram.nejati@gmail.com — we'll update the gallery.",
     stat1:"Installations",stat2:"Years Experience",stat3:"Customer Satisfaction",stat4:"Emergency",
     process_label:"How It Works",process_title:"Your Path to Perfect Climate",
     p1_title:"Consultation",p1_desc:"Free initial consultation — we analyze your space and requirements.",
@@ -750,7 +750,7 @@ const BOT = {
     wartung:"Unser Wartungsservice umfasst: Filterkontrolle & -reinigung, Kältemittelprüfung, Elektrokontrolle, Leistungstest und vollständige Dokumentation. Wir empfehlen eine jährliche Wartung. 🛡️",
     reparatur:"Bei Störungen sind wir schnell zur Stelle! Wir bieten 24/7 Notdienst. Typische Reparaturen: Kältemittelleck, Kompressordefekt, Elektronikfehler, Vereisungsprobleme. Kontaktieren Sie uns: 0176 12345678",
     preis:"Die Kosten hängen von Leistung, Raumgröße und System ab. Eine Standard-Split-Anlage (3,5 kW) beginnt ab ca. 1.500€ inkl. Installation. Wir erstellen Ihnen gerne ein kostenloses, individuelles Angebot!",
-    kontakt:"Sie erreichen uns unter:\n📧 shahram.nejati@gmal.com\n📞 0176 12345678\nMo–Fr 08:00–18:00, Sa 09:00–14:00",
+    kontakt:"Sie erreichen uns unter:\n📧 shahram.nejati@gmail.com\n📞 0176 12345678\nMo–Fr 08:00–18:00, Sa 09:00–14:00",
     beratung:"Wir beraten Sie kostenlos bei der Auswahl des richtigen Klimasystems. Dabei berücksichtigen wir Raumgröße, Wärmedämmung, Nutzungsverhalten und Budget. Schreiben Sie uns!",
     default:"Das kann ich Ihnen gerne beantworten! Am besten wenden Sie sich direkt an unsere Experten — via Telegram oder per Telefon: 0176 12345678."
   },
@@ -760,7 +760,7 @@ const BOT = {
     wartung:"Our maintenance service includes: filter inspection & cleaning, refrigerant check, electrical inspection, performance test, and complete documentation. We recommend annual maintenance. 🛡️",
     reparatur:"We respond quickly to breakdowns! We offer 24/7 emergency service. Typical repairs: refrigerant leaks, compressor failure, electronics errors, icing issues. Contact us: 0176 12345678",
     preis:"Costs depend on capacity, room size, and system type. A standard split unit (3.5 kW) starts from approx. €1,500 incl. installation. We're happy to provide a free, customized quote!",
-    kontakt:"You can reach us at:\n📧 shahram.nejati@gmal.com\n📞 0176 12345678\nMon–Fri 08:00–18:00, Sat 09:00–14:00",
+    kontakt:"You can reach us at:\n📧 shahram.nejati@gmail.com\n📞 0176 12345678\nMon–Fri 08:00–18:00, Sat 09:00–14:00",
     beratung:"We offer free consultation for choosing the right climate system, considering room size, insulation, usage patterns, and budget. Write to us!",
     default:"I'd be happy to answer that! Best to contact our experts directly — via Telegram or phone: 0176 12345678."
   }
@@ -912,7 +912,7 @@ function submitForm(e) {
     // Fallback: open mailto
     const fields = Array.from(form.querySelectorAll('input,textarea,select'));
     const body = fields.map(f => `${f.placeholder||f.name}: ${f.value}`).join('\n');
-    window.location.href = `mailto:shahram.nejati@gmal.com?subject=Anfrage%20von%20Coolify%20Website&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:shahram.nejati@gmail.com?subject=Anfrage%20von%20Coolify%20Website&body=${encodeURIComponent(body)}`;
   });
   document.getElementById('formSuccess').style.display = 'block';
   form.reset();

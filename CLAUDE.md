@@ -66,7 +66,7 @@ CSS custom properties are defined at the top of the `<style>` block in `index.ht
 
 ## Key Customization Points
 
-- **Contact email / phone**: Search `shahram.nejati@gmal.com` and `017612345678` in `index.html` to update.
+- **Contact email / phone**: Search `shahram.nejati@gmail.com` and `017612345678` in `index.html` to update.
 - **Telegram bot link**: The `openTelegram()` function hardcodes `https://t.me/Coolifiybot`.
 - **Chatbot responses**: Edit the `BOT` object (near the bottom `<script>`), one entry per service topic in both `de` and `en`.
 - **Translations**: Edit the `T` object in the same script block.
