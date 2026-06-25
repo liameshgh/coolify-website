@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="de" data-lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coolify — Klimatechnik der Zukunft</title>
+<meta name="description" content="Coolify: Professionelle Klimaanlagen-Installation, Wartung, Reparatur und Beratung. Modern, zuverlässig, zukunftssicher.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="/socket.io/socket.io.js" onerror="window.io=undefined"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#0252A1;--pl:#45A9F2;--pd:#2D3A9A;
+  --ac:#F37D4B;--ac2:#f59a72;
+  --bg:#F6FBFF;--bg2:#EEF6FF;
+  --surf:#fff;
+  --brd:rgba(2,82,161,.12);--brds:rgba(69,169,242,.35);
+  --tx:#0C1A2E;--txm:#3D5070;--txl:#7A9ABF;
+  --sh:0 4px 24px rgba(2,82,161,.1);
+  --shl:0 12px 48px rgba(2,82,161,.16);
+  --shxl:0 24px 72px rgba(2,82,161,.22);
+  --glow:0 0 40px rgba(69,169,242,.25);
+  --r8:8px;--r16:16px;--r24:24px;--r32:32px;
+  --fh:'Outfit',sans-serif;--fb:'Inter',sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--tx);line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--fh);line-height:1.15}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--fb);border:none;background:none}
+
+/* LAYOUT */
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.section{padding:96px 0}
+.section-label{font-family:var(--fh);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--pl);margin-bottom:12px}
+.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--tx);margin-bottom:16px}
+.section-sub{font-size:1.1rem;color:var(--txm);max-width:560px;line-height:1.7}
+
+/* GRADIENT TEXT */
+.grad{background:linear-gradient(135deg,var(--p),var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--r8);font-weight:600;font-size:.95rem;transition:.25s var(--ease);white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,#F37D4B,#e86530);color:#fff;box-shadow:0 4px 20px rgba(243,125,75,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(243,125,75,.5)}
+.btn-outline{background:transparent;color:var(--p);border:1.5px solid var(--brds)}
+.btn-outline:hover{background:var(--bg2);transform:translateY(-2px)}
+.btn-sm{padding:10px 20px;font-size:.875rem}
+
+/* CARD BASE */
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r24);padding:32px;box-shadow:var(--sh);transition:.3s var(--ease)}
+.card:hover{box-shadow:var(--shl);transform:translateY(-4px);border-color:var(--brds)}
+
+/* ===== NAV ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:.3s var(--ease)}
+.nav.scrolled{background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--brd);box-shadow:var(--sh)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fh);font-weight:800;font-size:1.4rem;color:var(--tx)}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--p),var(--ac));border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(3,105,161,.3)}
+.logo-icon svg{width:20px;height:20px;stroke:#fff;stroke-width:2.5;fill:none}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:.9rem;font-weight:500;color:var(--txm);transition:.2s}
+.nav-links a:hover{color:var(--p)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:var(--bg2);border:1px solid var(--brd);font-size:.8rem;font-weight:600;color:var(--txm);cursor:pointer;transition:.2s}
+.lang-btn:hover{border-color:var(--brds);color:var(--p)}
+.lang-btn.active{background:var(--p);color:#fff;border-color:var(--p)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;padding:8px;cursor:pointer}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--tx);border-radius:2px;transition:.3s}
+
+/* ===== HERO ===== */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:72px;background:linear-gradient(135deg,#F0F9FF 0%,#E0F2FE 40%,#BAE6FD 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(3,105,161,.08) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:80px 0}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(3,105,161,.08);border:1px solid var(--brds);border-radius:20px;padding:6px 16px;font-size:.8rem;font-weight:600;color:var(--p);margin-bottom:24px}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--ac);animation:pulse 2s infinite}
+.hero h1{font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:900;color:var(--tx);margin-bottom:20px;line-height:1.1}
+.hero-sub{font-size:1.15rem;color:var(--txm);margin-bottom:36px;line-height:1.75;max-width:500px}
+.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hero-trust{display:flex;align-items:center;gap:16px;margin-top:40px;flex-wrap:wrap}
+.hero-trust-item{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--txm)}
+.hero-trust-icon{width:20px;height:20px;stroke:var(--pl);stroke-width:2;fill:none}
+
+/* 3D AC VISUAL */
+.ac-scene{perspective:1200px;width:420px;height:380px;margin-left:auto;flex-shrink:0}
+.ac-stage{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:floatY 8s ease-in-out infinite}
+/* Indoor unit */
+.ac-indoor{position:absolute;top:30px;left:40px;width:300px;height:100px;transform-style:preserve-3d;transform:rotateX(10deg) rotateY(-15deg)}
+.ac-indoor-face{position:absolute;width:100%;height:100%;background:linear-gradient(135deg,#F8FAFC,#E2E8F0);border-radius:18px;box-shadow:var(--shxl),var(--glow)}
+.ac-indoor-bottom{position:absolute;bottom:-18px;left:8px;right:8px;height:18px;background:linear-gradient(180deg,#CBD5E1,#94A3B8);transform:rotateX(-90deg);transform-origin:top;border-radius:0 0 8px 8px}
+.ac-led-strip{position:absolute;bottom:12px;left:20px;right:20px;height:3px;background:linear-gradient(90deg,var(--ac),var(--pl),var(--ac));border-radius:2px;animation:ledPulse 3s ease-in-out infinite;box-shadow:0 0 10px var(--ac)}
+.ac-louvre{position:absolute;top:50%;left:20px;right:20px;height:20px;transform:translateY(-50%);background:linear-gradient(180deg,transparent 0%,rgba(148,163,184,.4) 45%,rgba(148,163,184,.4) 55%,transparent 100%);border-radius:4px}
+.ac-display{position:absolute;top:14px;right:24px;width:48px;height:28px;background:#0C1A2E;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:10px;color:var(--ac);box-shadow:0 0 8px rgba(0,212,255,.4)}
+/* Outdoor unit */
+.ac-outdoor{position:absolute;bottom:20px;right:20px;width:140px;height:160px;transform-style:preserve-3d;transform:rotateX(8deg) rotateY(20deg)}
+.ac-outdoor-face{position:absolute;width:100%;height:100%;background:linear-gradient(135deg,#E2E8F0,#CBD5E1);border-radius:12px;box-shadow:var(--shxl)}
+.ac-fan{position:absolute;top:50%;left:50%;width:80px;height:80px;transform:translate(-50%,-50%);border-radius:50%;border:4px solid rgba(148,163,184,.5);animation:spinFan 4s linear infinite;display:flex;align-items:center;justify-content:center}
+.ac-fan-blade{position:absolute;width:28px;height:8px;background:linear-gradient(90deg,#94A3B8,#CBD5E1);border-radius:4px;transform-origin:100% 50%}
+.ac-fan-blade:nth-child(1){transform:rotate(0deg) translateX(-50%)}
+.ac-fan-blade:nth-child(2){transform:rotate(120deg) translateX(-50%)}
+.ac-fan-blade:nth-child(3){transform:rotate(240deg) translateX(-50%)}
+.ac-outdoor-grill{position:absolute;bottom:8px;left:8px;right:8px;height:40px;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(100,116,139,.2) 3px,rgba(100,116,139,.2) 4px);border-radius:0 0 8px 8px}
+/* Floating particles */
+.hero-particles{position:absolute;inset:0;pointer-events:none}
+.particle{position:absolute;border-radius:50%;animation:drift var(--d,8s) ease-in-out infinite}
+
+/* ===== SERVICES ===== */
+.services{background:var(--surf)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px}
+.service-card{position:relative;overflow:hidden;cursor:default}
+.service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--p),var(--pl));opacity:0;transition:.3s var(--ease);border-radius:var(--r24)}
+.service-card:hover::before{opacity:.04}
+.service-icon{width:56px;height:56px;background:linear-gradient(135deg,rgba(3,105,161,.08),rgba(14,165,233,.12));border:1px solid var(--brd);border-radius:var(--r16);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:.3s}
+.service-card:hover .service-icon{background:linear-gradient(135deg,var(--p),var(--pl));border-color:transparent;box-shadow:0 8px 24px rgba(3,105,161,.3)}
+.service-card:hover .service-icon svg{stroke:#fff}
+.service-icon svg{width:26px;height:26px;stroke:var(--p);stroke-width:1.8;fill:none;transition:.3s}
+.service-card h3{font-size:1.2rem;font-weight:700;margin-bottom:10px;color:var(--tx)}
+.service-card p{font-size:.9rem;color:var(--txm);line-height:1.7}
+.service-tag{display:inline-block;margin-top:16px;font-size:.75rem;font-weight:600;color:var(--pl);background:rgba(14,165,233,.08);padding:4px 12px;border-radius:20px}
+
+/* ===== SHOWCASE 3D ===== */
+.showcase{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px}
+.showcase-card{border-radius:var(--r24);overflow:hidden;position:relative;height:320px;perspective:800px;cursor:pointer}
+.showcase-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.6s var(--ease)}
+.showcase-card:hover .showcase-card-inner{transform:rotateX(5deg) rotateY(-5deg)}
+.showcase-img{width:100%;height:100%;object-fit:cover;border-radius:var(--r24)}
+.showcase-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;gap:12px;position:relative;overflow:hidden}
+.showcase-img-placeholder svg{width:80px;height:80px;stroke:rgba(255,255,255,.7);stroke-width:1;fill:none}
+.showcase-label{position:absolute;bottom:0;left:0;right:0;padding:24px;background:linear-gradient(0deg,rgba(12,26,46,.8),transparent);color:#fff;font-family:var(--fh);font-weight:600;font-size:1.1rem}
+.showcase-label-sub{font-size:.8rem;opacity:.75;font-weight:400;margin-top:4px}
+.indoor-bg{background:linear-gradient(135deg,#0C4A6E 0%,#0369A1 50%,#0EA5E9 100%)}
+.outdoor-bg{background:linear-gradient(135deg,#0C1A2E 0%,#1E3A5F 50%,#0369A1 100%)}
+
+/* ===== STATS ===== */
+.stats{background:linear-gradient(135deg,#2D3A9A,#0252A1,#45A9F2);padding:80px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.stat-value{font-family:var(--fh);font-size:clamp(2rem,4vw,3rem);font-weight:900;color:#fff;line-height:1}
+.stat-suffix{color:#F37D4B;font-size:.7em}
+.stat-label{font-size:.9rem;color:rgba(255,255,255,.7);margin-top:8px}
+
+/* ===== PROCESS ===== */
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
+.process-steps::before{content:'';position:absolute;top:28px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,var(--brd),var(--brds),var(--brd));z-index:0}
+.process-step{text-align:center;position:relative;z-index:1}
+.step-num{width:56px;height:56px;border-radius:50%;background:var(--surf);border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:var(--fh);font-weight:800;font-size:1.1rem;color:var(--p);box-shadow:var(--sh);transition:.3s}
+.process-step:hover .step-num{background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;border-color:transparent;box-shadow:0 8px 24px rgba(3,105,161,.3)}
+.process-step h4{font-size:1rem;font-weight:700;margin-bottom:8px}
+.process-step p{font-size:.85rem;color:var(--txm);padding:0 12px}
+
+/* ===== CONTACT ===== */
+.contact{background:var(--bg2)}
+.contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;margin-top:56px;align-items:start}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:.85rem;font-weight:600;color:var(--tx);margin-bottom:8px}
+.form-input{width:100%;padding:13px 16px;border:1.5px solid var(--brd);border-radius:var(--r8);background:var(--surf);font-family:var(--fb);font-size:.95rem;color:var(--tx);outline:none;transition:.2s}
+.form-input:focus{border-color:var(--pl);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
+.form-input::placeholder{color:var(--txl)}
+textarea.form-input{resize:vertical;min-height:120px}
+.contact-info-card{border-radius:var(--r24);overflow:hidden}
+.contact-info-header{background:linear-gradient(135deg,var(--pd),var(--p));padding:32px;color:#fff}
+.contact-info-header h3{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+.contact-info-header p{opacity:.8;font-size:.9rem}
+.contact-info-body{padding:32px;background:var(--surf);border:1px solid var(--brd);border-top:none;border-radius:0 0 var(--r24) var(--r24)}
+.contact-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:24px}
+.contact-item:last-child{margin-bottom:0}
+.contact-item-icon{width:44px;height:44px;border-radius:var(--r8);background:linear-gradient(135deg,rgba(3,105,161,.08),rgba(14,165,233,.12));border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-item-icon svg{width:20px;height:20px;stroke:var(--p);stroke-width:1.8;fill:none}
+.contact-item-label{font-size:.75rem;font-weight:600;color:var(--txl);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.contact-item-value{font-weight:600;color:var(--tx)}
+.form-success{display:none;padding:16px;background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.25);border-radius:var(--r8);color:#065f46;font-size:.9rem;margin-bottom:16px}
+
+/* ===== FOOTER ===== */
+.footer{background:var(--tx);padding:64px 0 32px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{font-size:.9rem;color:rgba(255,255,255,.55);margin-top:16px;line-height:1.7;max-width:260px}
+.footer-col h4{font-family:var(--fh);font-weight:700;font-size:.95rem;color:#fff;margin-bottom:16px}
+.footer-col a{display:block;font-size:.875rem;color:rgba(255,255,255,.5);margin-bottom:10px;transition:.2s}
+.footer-col a:hover{color:var(--ac)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:.8rem;color:rgba(255,255,255,.35)}
+
+/* ===== CHATBOT ===== */
+.chatbot-btn{position:fixed;bottom:28px;right:28px;z-index:900;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pl));box-shadow:0 8px 32px rgba(3,105,161,.4);display:flex;align-items:center;justify-content:center;transition:.3s var(--ease);cursor:pointer}
+.chatbot-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(3,105,161,.5)}
+.chatbot-btn svg{width:26px;height:26px;stroke:#fff;stroke-width:2;fill:none;transition:.3s}
+.chatbot-badge{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#EF4444;border-radius:50%;border:2px solid #fff;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+.chatbot-window{position:fixed;bottom:100px;right:28px;z-index:900;width:360px;height:500px;background:var(--surf);border-radius:var(--r24);box-shadow:var(--shxl);border:1px solid var(--brd);display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(16px) scale(.96);transition:.3s var(--ease);overflow:hidden}
+.chatbot-window.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.chat-header{background:linear-gradient(135deg,var(--pd),var(--p));padding:16px 20px;display:flex;align-items:center;gap:12px}
+.chat-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-avatar svg{width:22px;height:22px;stroke:#fff;stroke-width:2;fill:none}
+.chat-header-info h4{font-family:var(--fh);font-weight:700;color:#fff;font-size:.95rem}
+.chat-header-info p{font-size:.75rem;color:rgba(255,255,255,.7)}
+.chat-close{margin-left:auto;background:rgba(255,255,255,.15);border:none;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
+.chat-close:hover{background:rgba(255,255,255,.25)}
+.chat-close svg{width:14px;height:14px;stroke:#fff;stroke-width:2.5;fill:none}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
+.msg{max-width:78%;padding:10px 14px;border-radius:16px;font-size:.875rem;line-height:1.55;animation:msgIn .25s ease}
+.msg-bot{background:var(--bg2);color:var(--tx);border-bottom-left-radius:4px;align-self:flex-start}
+.msg-user{background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.chat-quick{padding:8px 12px;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--brd)}
+.quick-btn{font-size:.75rem;padding:5px 10px;border-radius:12px;background:var(--bg2);border:1px solid var(--brd);color:var(--p);cursor:pointer;font-weight:500;transition:.2s;white-space:nowrap}
+.quick-btn:hover{background:var(--p);color:#fff;border-color:var(--p)}
+.chat-input-row{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--brd)}
+.chat-input{flex:1;padding:10px 14px;border:1.5px solid var(--brd);border-radius:20px;font-size:.875rem;font-family:var(--fb);color:var(--tx);outline:none;transition:.2s;background:var(--bg)}
+.chat-input:focus{border-color:var(--pl)}
+.chat-send{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--pl));display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.chat-send:hover{transform:scale(1.08)}
+.chat-send svg{width:16px;height:16px;stroke:#fff;stroke-width:2.5;fill:none}
+.chat-tg-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 16px;padding:10px;background:#229ED9;border-radius:var(--r8);color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;border:none}
+.chat-tg-btn:hover{background:#1a7db5;transform:translateY(-1px)}
+.chat-tg-btn svg{width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu{position:fixed;inset:0;z-index:999;background:rgba(12,26,46,.95);backdrop-filter:blur(12px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(100%);transition:.4s var(--ease)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-family:var(--fh);font-size:1.8rem;font-weight:700;color:#fff;opacity:.85;transition:.2s}
+.mobile-menu a:hover{opacity:1;color:var(--ac)}
+.mobile-menu-close{position:absolute;top:24px;right:24px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.mobile-menu-close svg{width:20px;height:20px;stroke:#fff;stroke-width:2;fill:none}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(32px);transition:.7s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+/* ===== KEYFRAMES ===== */
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes ledPulse{0%,100%{opacity:1;box-shadow:0 0 10px var(--ac)}50%{opacity:.6;box-shadow:0 0 4px var(--ac)}}
+@keyframes spinFan{to{transform:rotate(360deg)}}
+@keyframes drift{0%,100%{transform:translate(0,0)}33%{transform:translate(var(--dx,8px),var(--dy,-12px))}66%{transform:translate(calc(var(--dx,8px)*-0.5),var(--dy2,6px))}}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .hero-grid,.contact-grid{grid-template-columns:1fr}
+  .ac-scene{display:none}
+  .showcase-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .process-steps{grid-template-columns:repeat(2,1fr);gap:32px}
+  .process-steps::before{display:none}
+}
+@media(max-width:768px){
+  .section{padding:64px 0}
+  .nav-links,.nav-right .btn{display:none}
+  .nav-hamburger{display:flex}
+  .hero-grid{padding:40px 0}
+  .footer-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .chatbot-window{width:calc(100vw - 32px);right:16px;bottom:90px}
+}
+@media(max-width:480px){
+  .hero-actions{flex-direction:column;align-items:flex-start}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .process-steps{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .ac-stage,.ac-led-strip,.ac-fan,.particle,.reveal{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        Coolify
+      </a>
+      <div class="nav-links">
+        <a href="#leistungen" data-i18n="nav_services">Leistungen</a>
+        <a href="#showcase" data-i18n="nav_products">Produkte</a>
+        <a href="#ablauf" data-i18n="nav_process">Ablauf</a>
+        <a href="#kontakt" data-i18n="nav_contact">Kontakt</a>
+      </div>
+      <div class="nav-right">
+        <div style="display:flex;gap:4px;background:var(--bg2);border:1px solid var(--brd);border-radius:20px;padding:4px">
+          <button class="lang-btn active" onclick="setLang('de')">DE</button>
+          <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <a href="#kontakt" class="btn btn-primary btn-sm" data-i18n="nav_cta">Angebot anfragen</a>
+      </div>
+      <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="toggleMenu()">
+    <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <a href="#leistungen" onclick="toggleMenu()" data-i18n="nav_services">Leistungen</a>
+  <a href="#showcase" onclick="toggleMenu()" data-i18n="nav_products">Produkte</a>
+  <a href="#ablauf" onclick="toggleMenu()" data-i18n="nav_process">Ablauf</a>
+  <a href="#kontakt" onclick="toggleMenu()" data-i18n="nav_contact">Kontakt</a>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="lang-btn" onclick="setLang('de');toggleMenu()" id="mobileLangDE" style="background:#fff;color:var(--p)">DE</button>
+    <button class="lang-btn" onclick="setLang('en');toggleMenu()" id="mobileLangEN">EN</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-dot"></span>
+          <span data-i18n="hero_eyebrow">Klimatechnik der nächsten Generation</span>
+        </div>
+        <h1 data-i18n="hero_h1">Die Zukunft<br>der <span class="grad">Klimatechnik</span><br>ist jetzt.</h1>
+        <p class="hero-sub" data-i18n="hero_sub">Professionelle Installation, Wartung und Reparatur von Klimaanlagen. Modernste Technologie für Ihr perfektes Raumklima — zuverlässig, energieeffizient, zukunftssicher.</p>
+        <div class="hero-actions">
+          <a href="#kontakt" class="btn btn-primary" data-i18n="hero_cta1">Kostenlos beraten lassen</a>
+          <a href="#leistungen" class="btn btn-outline" data-i18n="hero_cta2">Leistungen entdecken</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <svg class="hero-trust-icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span data-i18n="trust_1">500+ Installationen</span>
+          </div>
+          <div class="hero-trust-item">
+            <svg class="hero-trust-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span data-i18n="trust_2">10+ Jahre Erfahrung</span>
+          </div>
+          <div class="hero-trust-item">
+            <svg class="hero-trust-icon" viewBox="0 0 24 24"><path d="M18.364 5.636A9 9 0 115.636 18.364M12 8v4l3 3"/></svg>
+            <span data-i18n="trust_3">24/7 Notdienst</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D AC VISUAL -->
+      <div class="ac-scene">
+        <div class="ac-stage">
+          <!-- Indoor unit -->
+          <div class="ac-indoor">
+            <div class="ac-indoor-face">
+              <div class="ac-louvre"></div>
+              <div class="ac-led-strip"></div>
+              <div class="ac-display">18°C</div>
+            </div>
+            <div class="ac-indoor-bottom"></div>
+          </div>
+          <!-- Outdoor unit -->
+          <div class="ac-outdoor">
+            <div class="ac-outdoor-face">
+              <div class="ac-fan">
+                <div class="ac-fan-blade"></div>
+                <div class="ac-fan-blade"></div>
+                <div class="ac-fan-blade"></div>
+              </div>
+              <div class="ac-outdoor-grill"></div>
+            </div>
+          </div>
+          <!-- Particles -->
+          <div class="hero-particles">
+            <div class="particle" style="width:6px;height:6px;background:var(--ac);opacity:.5;top:20%;left:10%;--d:7s;--dx:12px;--dy:-15px;--dy2:8px"></div>
+            <div class="particle" style="width:4px;height:4px;background:var(--pl);opacity:.4;top:60%;left:80%;--d:9s;--dx:-8px;--dy:-10px;--dy2:12px"></div>
+            <div class="particle" style="width:8px;height:8px;background:rgba(14,165,233,.3);opacity:.3;top:80%;left:30%;--d:11s;--dx:10px;--dy:-8px;--dy2:6px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section services" id="leistungen">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" data-i18n="services_label">Unsere Leistungen</p>
+      <h2 class="section-title" data-i18n="services_title">Was wir für Sie tun</h2>
+      <p class="section-sub" data-i18n="services_sub">Von der ersten Beratung bis zur langfristigen Betreuung — wir begleiten Sie in jedem Schritt Ihrer Klimatisierung.</p>
+    </div>
+    <div class="services-grid">
+      <div class="card service-card reveal reveal-delay-1">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3 data-i18n="s1_title">Installation</h3>
+        <p data-i18n="s1_desc">Präzise Montage modernster Klimasysteme — Split-Anlagen, Multi-Split, VRF-Systeme. Von der Planung bis zur Inbetriebnahme aus einer Hand.</p>
+        <span class="service-tag" data-i18n="s1_tag">Split · Multi-Split · VRF</span>
+      </div>
+      <div class="card service-card reveal reveal-delay-2">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 data-i18n="s2_title">Wartung &amp; Service</h3>
+        <p data-i18n="s2_desc">Regelmäßige Inspektion, Filterreinigung und Leistungsprüfung für optimale Effizienz und maximale Lebensdauer Ihrer Klimaanlage.</p>
+        <span class="service-tag" data-i18n="s2_tag">Inspektion · Reinigung · Prüfung</span>
+      </div>
+      <div class="card service-card reveal reveal-delay-1">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </div>
+        <h3 data-i18n="s3_title">Reparatur</h3>
+        <p data-i18n="s3_desc">Schnelle Diagnose und zuverlässige Behebung aller Defekte und Störungen — für minimale Ausfallzeiten und maximalen Komfort.</p>
+        <span class="service-tag" data-i18n="s3_tag">Diagnose · Reparatur · Notdienst</span>
+      </div>
+      <div class="card service-card reveal reveal-delay-2">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M6.343 6.343l-.707-.707M10.34 17.34A3 3 0 003 15a3 3 0 006 2.34M15 10a3 3 0 110 6M9 15a3 3 0 116 0"/></svg>
+        </div>
+        <h3 data-i18n="s4_title">Beratung &amp; Planung</h3>
+        <p data-i18n="s4_desc">Individuelle Energieberatung und maßgeschneiderte Lösungen — wir finden das perfekte Klimasystem für Ihre Räume und Ihr Budget.</p>
+        <span class="service-tag" data-i18n="s4_tag">Energieberatung · Planung · Angebot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="section showcase" id="showcase">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label" data-i18n="showcase_label">Technik im Detail</p>
+      <h2 class="section-title" data-i18n="showcase_title">Innen &amp; Außen — perfekt abgestimmt</h2>
+      <p class="section-sub" style="margin:0 auto" data-i18n="showcase_sub">Modernste Klimatechnik verbindet elegantes Innendesign mit robuster Außentechnik.</p>
+    </div>
+    <div class="showcase-grid">
+      <div class="showcase-card reveal reveal-delay-1">
+        <div class="showcase-card-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dce9f6"/><stop offset="100%" stop-color="#c4d6ec"/></linearGradient>
+              <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e0d2"/><stop offset="100%" stop-color="#d4c8b4"/></linearGradient>
+              <linearGradient id="acG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="65%" stop-color="#f0f4f8"/><stop offset="100%" stop-color="#dde4ec"/></linearGradient>
+              <filter id="acSh" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#1a3a5e" flood-opacity="0.22"/></filter>
+            </defs>
+            <rect width="800" height="370" fill="url(#wallG)"/>
+            <rect y="370" width="800" height="130" fill="url(#floorG)"/>
+            <rect y="366" width="800" height="7" fill="#bfb3a2"/>
+            <line x1="0" y1="185" x2="800" y2="185" stroke="#c0cede" stroke-width="0.6" opacity="0.5"/>
+            <ellipse cx="400" cy="302" rx="240" ry="18" fill="#1a3050" opacity="0.10"/>
+            <rect x="148" y="105" width="504" height="178" rx="22" fill="url(#acG)" filter="url(#acSh)"/>
+            <rect x="148" y="105" width="504" height="28" rx="22" fill="#f8fafb"/>
+            <rect x="148" y="122" width="504" height="11" fill="#f8fafb"/>
+            <rect x="170" y="118" width="420" height="11" rx="3" fill="#e8ecf2"/>
+            <line x1="170" y1="122" x2="590" y2="122" stroke="#d4dae4" stroke-width="1"/>
+            <line x1="170" y1="127" x2="590" y2="127" stroke="#d4dae4" stroke-width="1"/>
+            <rect x="170" y="245" width="420" height="26" rx="5" fill="#d4dce8"/>
+            <rect x="170" y="249" width="420" height="4" rx="2" fill="#b8c4d4"/>
+            <rect x="170" y="256" width="420" height="4" rx="2" fill="#b8c4d4"/>
+            <rect x="170" y="263" width="420" height="4" rx="2" fill="#b8c4d4"/>
+            <rect x="168" y="271" width="424" height="6" rx="3" fill="#00c8f0" opacity="0.92"/>
+            <rect x="148" y="267" width="504" height="14" rx="7" fill="#00d4ff" opacity="0.13"/>
+            <rect x="516" y="118" width="96" height="56" rx="9" fill="#111c2a"/>
+            <rect x="520" y="122" width="88" height="48" rx="7" fill="#0a1520"/>
+            <text x="564" y="144" text-anchor="middle" fill="#00e8ff" font-size="16" font-family="monospace" font-weight="bold">20°C</text>
+            <text x="564" y="160" text-anchor="middle" fill="#0080c0" font-size="9" font-family="monospace" letter-spacing="1">COOL</text>
+            <circle cx="534" cy="172" r="3" fill="#00d4ff" opacity="0.9"/>
+            <circle cx="547" cy="172" r="3" fill="#00d4ff" opacity="0.35"/>
+            <circle cx="560" cy="172" r="3" fill="#00d4ff" opacity="0.35"/>
+            <text x="195" y="152" fill="#a0b2c6" font-size="13" font-family="'Helvetica Neue',sans-serif" letter-spacing="3" font-weight="300">COOLIFY</text>
+            <text x="195" y="168" fill="#b8c8d8" font-size="9" font-family="sans-serif" letter-spacing="2">INVERTER PRO</text>
+            <circle cx="192" cy="210" r="5" fill="#141e2e"/>
+            <circle cx="192" cy="210" r="2.5" fill="#281830" opacity="0.8"/>
+            <rect x="142" y="120" width="9" height="44" rx="3.5" fill="#d0d8e4"/>
+            <rect x="649" y="120" width="9" height="44" rx="3.5" fill="#d0d8e4"/>
+            <rect x="162" y="108" width="340" height="9" rx="4.5" fill="white" opacity="0.55"/>
+          </svg>
+          <div class="showcase-label">
+            <div data-i18n="showcase_indoor">Innengerät</div>
+            <div class="showcase-label-sub" data-i18n="showcase_indoor_sub">Wandmontage · Leise · Energieeffizient</div>
+          </div>
+        </div>
+      </div>
+      <div class="showcase-card reveal reveal-delay-2">
+        <div class="showcase-card-inner">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block">
+            <defs>
+              <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7ab8e0"/><stop offset="100%" stop-color="#aed0ea"/></linearGradient>
+              <linearGradient id="gndG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8c0b0"/><stop offset="100%" stop-color="#b4ac9c"/></linearGradient>
+              <linearGradient id="unitG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d4d8dc"/><stop offset="50%" stop-color="#c4c8cc"/><stop offset="100%" stop-color="#b4b8bc"/></linearGradient>
+              <linearGradient id="unitTopG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dce0e4"/><stop offset="100%" stop-color="#c4c8cc"/></linearGradient>
+              <radialGradient id="fanHubG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#989ea8"/><stop offset="100%" stop-color="#787e88"/></radialGradient>
+              <filter id="ouSh" x="-10%" y="-5%" width="120%" height="115%"><feDropShadow dx="8" dy="12" stdDeviation="18" flood-color="#1a2030" flood-opacity="0.28"/></filter>
+            </defs>
+            <rect width="800" height="345" fill="url(#skyG)"/>
+            <ellipse cx="180" cy="78" rx="88" ry="32" fill="white" opacity="0.72"/>
+            <ellipse cx="248" cy="66" rx="54" ry="26" fill="white" opacity="0.68"/>
+            <ellipse cx="620" cy="95" rx="68" ry="24" fill="white" opacity="0.5"/>
+            <rect y="345" width="800" height="155" fill="url(#gndG)"/>
+            <line x1="0" y1="345" x2="800" y2="345" stroke="#a4a094" stroke-width="2"/>
+            <rect x="228" y="88" width="344" height="282" fill="#ccc8c0"/>
+            <rect x="228" y="88" width="344" height="282" fill="white" opacity="0.12"/>
+            <ellipse cx="400" cy="352" rx="158" ry="10" fill="#202828" opacity="0.18"/>
+            <rect x="258" y="88" width="284" height="268" rx="12" fill="url(#unitG)" filter="url(#ouSh)"/>
+            <rect x="258" y="88" width="284" height="30" rx="12" fill="url(#unitTopG)"/>
+            <rect x="258" y="108" width="284" height="10" fill="url(#unitTopG)"/>
+            <rect x="294" y="74" width="16" height="26" rx="8" fill="#c0a840"/>
+            <rect x="320" y="74" width="12" height="26" rx="6" fill="#b8b8c4"/>
+            <rect x="291" y="74" width="22" height="14" rx="7" fill="#383838"/>
+            <rect x="318" y="74" width="16" height="12" rx="6" fill="#484848"/>
+            <circle cx="400" cy="228" r="112" fill="#adb2b8"/>
+            <circle cx="400" cy="228" r="108" fill="#b4b9be"/>
+            <circle cx="400" cy="228" r="112" fill="none" stroke="#9ca1a6" stroke-width="3"/>
+            <g transform="translate(400,228)">
+              <path d="M0,-80 C-10,-58 -10,-28 0,0 C10,-28 10,-58 0,-80Z" fill="#7e8898" transform="rotate(0)"/>
+              <path d="M0,-80 C-10,-58 -10,-28 0,0 C10,-28 10,-58 0,-80Z" fill="#8a94a4" transform="rotate(72)"/>
+              <path d="M0,-80 C-10,-58 -10,-28 0,0 C10,-28 10,-58 0,-80Z" fill="#7e8898" transform="rotate(144)"/>
+              <path d="M0,-80 C-10,-58 -10,-28 0,0 C10,-28 10,-58 0,-80Z" fill="#8a94a4" transform="rotate(216)"/>
+              <path d="M0,-80 C-10,-58 -10,-28 0,0 C10,-28 10,-58 0,-80Z" fill="#7e8898" transform="rotate(288)"/>
+              <circle cx="0" cy="0" r="24" fill="url(#fanHubG)"/>
+              <circle cx="0" cy="0" r="16" fill="#707880"/>
+              <circle cx="0" cy="0" r="7" fill="#606070"/>
+              <circle cx="0" cy="0" r="3.5" fill="#505060"/>
+            </g>
+            <rect x="268" y="322" width="264" height="28" rx="6" fill="#adb2b6"/>
+            <line x1="268" y1="328" x2="532" y2="328" stroke="#969a9e" stroke-width="1.5"/>
+            <line x1="268" y1="334" x2="532" y2="334" stroke="#969a9e" stroke-width="1.5"/>
+            <line x1="268" y1="340" x2="532" y2="340" stroke="#969a9e" stroke-width="1.5"/>
+            <line x1="268" y1="346" x2="532" y2="346" stroke="#969a9e" stroke-width="1.5"/>
+            <rect x="527" y="136" width="13" height="160" rx="5" fill="#aaafb4"/>
+            <line x1="527" y1="158" x2="540" y2="158" stroke="#9ca1a4" stroke-width="1"/>
+            <line x1="527" y1="180" x2="540" y2="180" stroke="#9ca1a4" stroke-width="1"/>
+            <line x1="527" y1="202" x2="540" y2="202" stroke="#9ca1a4" stroke-width="1"/>
+            <line x1="527" y1="224" x2="540" y2="224" stroke="#9ca1a4" stroke-width="1"/>
+            <rect x="262" y="312" width="30" height="22" rx="5" fill="#bcbfc4"/>
+            <circle cx="270" cy="320" r="4.5" fill="#9ca0a4"/>
+            <circle cx="284" cy="320" r="4.5" fill="#9ca0a4"/>
+            <rect x="344" y="96" width="112" height="14" rx="4" fill="#a4a9ae"/>
+            <text x="400" y="107" text-anchor="middle" fill="#686c72" font-size="7.5" font-family="sans-serif" letter-spacing="1.5">COOLIFY OUTDOOR</text>
+            <line x1="258" y1="88" x2="258" y2="356" stroke="white" stroke-width="1.8" opacity="0.38"/>
+            <line x1="258" y1="88" x2="542" y2="88" stroke="white" stroke-width="1.8" opacity="0.38"/>
+          </svg>
+          <div class="showcase-label">
+            <div data-i18n="showcase_outdoor">Außengerät</div>
+            <div class="showcase-label-sub" data-i18n="showcase_outdoor_sub">Kompressor · Wetterfest · Leistungsstark</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:20px;font-size:.85rem;color:var(--txm)">Eigene Fotos gewünscht? → <a href="mailto:darvish.amir@gmx.de" style="color:var(--p);font-weight:600">darvish.amir@gmx.de</a></p>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-value"><span class="counter" data-target="200">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label" data-i18n="stat1">Installationen</div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="stat-value"><span class="counter" data-target="5">0</span><span class="stat-suffix">+</span></div>
+        <div class="stat-label" data-i18n="stat2">Jahre Erfahrung</div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="stat-value"><span class="counter" data-target="100">0</span><span class="stat-suffix">%</span></div>
+        <div class="stat-label" data-i18n="stat3">Kundenzufriedenheit</div>
+      </div>
+      <div class="reveal reveal-delay-3">
+        <div class="stat-value">24<span class="stat-suffix">/7</span></div>
+        <div class="stat-label" data-i18n="stat4">Notdienst</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" id="ablauf" style="background:var(--surf)">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label" data-i18n="process_label">So einfach geht's</p>
+      <h2 class="section-title" data-i18n="process_title">Ihr Weg zum perfekten Klima</h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-num">1</div>
+        <h4 data-i18n="p1_title">Beratung</h4>
+        <p data-i18n="p1_desc">Kostenlose Erstberatung — wir analysieren Ihre Räume und Anforderungen.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-num">2</div>
+        <h4 data-i18n="p2_title">Planung</h4>
+        <p data-i18n="p2_desc">Maßgeschneidertes Angebot mit optimalen Systemlösungen für Ihr Budget.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-num">3</div>
+        <h4 data-i18n="p3_title">Installation</h4>
+        <p data-i18n="p3_desc">Fachgerechte Montage durch unser zertifiziertes Technikteam — sauber und pünktlich.</p>
+      </div>
+      <div class="process-step reveal" style="transition-delay:.4s">
+        <div class="step-num">4</div>
+        <h4 data-i18n="p4_title">Abnahme</h4>
+        <p data-i18n="p4_desc">Vollständige Einweisung, Dokumentation und Übergabe mit Garantie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="kontakt">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label" data-i18n="contact_label">Kontakt</p>
+      <h2 class="section-title" data-i18n="contact_title">Sprechen Sie mit uns</h2>
+      <p class="section-sub" data-i18n="contact_sub">Stellen Sie uns Ihre Fragen oder fordern Sie ein kostenloses Angebot an. Wir antworten innerhalb von 24 Stunden.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="card reveal">
+        <div class="form-success" id="formSuccess" data-i18n="form_success">Ihre Nachricht wurde gesendet. Wir melden uns bald!</div>
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div class="form-group">
+              <label class="form-label" data-i18n="form_name">Name</label>
+              <input class="form-input" type="text" placeholder="Max Mustermann" required data-i18n-ph="form_name_ph">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="form_phone_label">Telefon</label>
+              <input class="form-input" type="tel" placeholder="017x xxxxxxx" data-i18n-ph="form_phone_ph">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="form_email">E-Mail</label>
+            <input class="form-input" type="email" placeholder="ihre@email.de" required data-i18n-ph="form_email_ph">
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="form_service">Leistung</label>
+            <select class="form-input">
+              <option data-i18n="form_select_default">Bitte wählen</option>
+              <option data-i18n="s1_title">Installation</option>
+              <option data-i18n="s2_title">Wartung &amp; Service</option>
+              <option data-i18n="s3_title">Reparatur</option>
+              <option data-i18n="s4_title">Beratung &amp; Planung</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="form_msg">Nachricht</label>
+            <textarea class="form-input" rows="4" placeholder="Beschreiben Sie Ihr Anliegen..." data-i18n-ph="form_msg_ph"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" data-i18n="form_submit">Nachricht senden</button>
+        </form>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="contact-info-card">
+          <div class="contact-info-header">
+            <h3 data-i18n="cinfo_title">Direktkontakt</h3>
+            <p data-i18n="cinfo_sub">Wir sind für Sie erreichbar</p>
+          </div>
+          <div class="contact-info-body">
+            <div class="contact-item">
+              <div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div>
+                <div class="contact-item-label" data-i18n="cinfo_email_label">E-Mail</div>
+                <a href="mailto:darvish.amir@gmx.de" class="contact-item-value" style="color:var(--p)">darvish.amir@gmx.de</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></div>
+              <div>
+                <div class="contact-item-label" data-i18n="cinfo_phone_label">Telefon</div>
+                <a href="tel:017612345678" class="contact-item-value" style="color:var(--p)">0176 12345678</a>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div>
+                <div class="contact-item-label" data-i18n="cinfo_hours_label">Öffnungszeiten</div>
+                <div class="contact-item-value" style="font-size:.9rem" data-i18n="cinfo_hours">Mo–Fr: 08:00–18:00<br>Sa: 09:00–14:00</div>
+              </div>
+            </div>
+            <div class="contact-item" style="margin-bottom:0">
+              <div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+              <div>
+                <div class="contact-item-label" data-i18n="cinfo_chat_label">Live-Chat</div>
+                <div class="contact-item-value" style="font-size:.9rem" data-i18n="cinfo_chat">Klicken Sie auf den Chat-Button unten rechts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="color:#fff">
+          <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+          Coolify
+        </div>
+        <p data-i18n="footer_desc">Klimatechnik der Zukunft — professionell, zuverlässig, energieeffizient. Ihr Partner für perfektes Raumklima.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_services">Leistungen</h4>
+        <a href="#leistungen" data-i18n="s1_title">Installation</a>
+        <a href="#leistungen" data-i18n="s2_title">Wartung &amp; Service</a>
+        <a href="#leistungen" data-i18n="s3_title">Reparatur</a>
+        <a href="#leistungen" data-i18n="s4_title">Beratung</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_company">Unternehmen</h4>
+        <a href="#ablauf" data-i18n="nav_process">Ablauf</a>
+        <a href="#kontakt" data-i18n="nav_contact">Kontakt</a>
+        <a href="#" data-i18n="footer_imprint">Impressum</a>
+        <a href="#" data-i18n="footer_privacy">Datenschutz</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_contact">Kontakt</h4>
+        <a href="mailto:darvish.amir@gmx.de">darvish.amir@gmx.de</a>
+        <a href="tel:017612345678">0176 12345678</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer_copy">© 2025 Coolify. Alle Rechte vorbehalten.</p>
+      <p data-i18n="footer_tagline">Klimatechnik der Zukunft</p>
+    </div>
+  </div>
+</footer>
+
+<!-- CHATBOT -->
+<button class="chatbot-btn" onclick="toggleChat()" id="chatBtn" title="Chat öffnen">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <span class="chatbot-badge" id="chatBadge">1</span>
+</button>
+
+<div class="chatbot-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+    <div class="chat-header-info">
+      <h4>Coolify Assistent</h4>
+      <p id="chatStatus">● Online</p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-quick" id="quickReplies">
+    <button class="quick-btn" onclick="quickMsg('installation')">Installation</button>
+    <button class="quick-btn" onclick="quickMsg('wartung')">Wartung</button>
+    <button class="quick-btn" onclick="quickMsg('reparatur')">Reparatur</button>
+    <button class="quick-btn" onclick="quickMsg('preis')">Kosten</button>
+  </div>
+  <button class="chat-tg-btn" onclick="openTelegram()">
+    <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+    <span id="tgBtnText">Direkt via Telegram anschreiben</span>
+  </button>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Schreiben Sie uns..." onkeydown="if(event.key==='Enter')sendMsg()">
+    <button class="chat-send" onclick="sendMsg()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
+<script>
+// ===== TRANSLATIONS =====
+const T = {
+  de: {
+    nav_services:"Leistungen",nav_products:"Produkte",nav_process:"Ablauf",nav_contact:"Kontakt",nav_cta:"Angebot anfragen",
+    hero_eyebrow:"Klimatechnik der nächsten Generation",
+    hero_h1:"Die Zukunft<br>der <span class='grad'>Klimatechnik</span><br>ist jetzt.",
+    hero_sub:"Professionelle Installation, Wartung und Reparatur von Klimaanlagen. Modernste Technologie für Ihr perfektes Raumklima — zuverlässig, energieeffizient, zukunftssicher.",
+    hero_cta1:"Kostenlos beraten lassen",hero_cta2:"Leistungen entdecken",
+    trust_1:"500+ Installationen",trust_2:"10+ Jahre Erfahrung",trust_3:"24/7 Notdienst",
+    services_label:"Unsere Leistungen",services_title:"Was wir für Sie tun",
+    services_sub:"Von der ersten Beratung bis zur langfristigen Betreuung — wir begleiten Sie in jedem Schritt.",
+    s1_title:"Installation",s1_desc:"Präzise Montage modernster Klimasysteme — Split-Anlagen, Multi-Split, VRF-Systeme. Von der Planung bis zur Inbetriebnahme aus einer Hand.",s1_tag:"Split · Multi-Split · VRF",
+    s2_title:"Wartung & Service",s2_desc:"Regelmäßige Inspektion, Filterreinigung und Leistungsprüfung für optimale Effizienz und maximale Lebensdauer.",s2_tag:"Inspektion · Reinigung · Prüfung",
+    s3_title:"Reparatur",s3_desc:"Schnelle Diagnose und zuverlässige Behebung aller Defekte — für minimale Ausfallzeiten und maximalen Komfort.",s3_tag:"Diagnose · Reparatur · Notdienst",
+    s4_title:"Beratung & Planung",s4_desc:"Individuelle Energieberatung und maßgeschneiderte Lösungen für Ihre Räume und Ihr Budget.",s4_tag:"Energieberatung · Planung · Angebot",
+    showcase_label:"Technik im Detail",showcase_title:"Innen & Außen — perfekt abgestimmt",
+    showcase_sub:"Modernste Klimatechnik verbindet elegantes Innendesign mit robuster Außentechnik.",
+    showcase_indoor:"Innengerät",showcase_indoor_sub:"Wandmontage · Leise · Energieeffizient",
+    showcase_outdoor:"Außengerät",showcase_outdoor_sub:"Kompressor · Wetterfest · Leistungsstark",
+    showcase_indoor_hint:"Ihr Foto des Innengeräts hier",showcase_outdoor_hint:"Ihr Foto des Außengeräts hier",
+    showcase_note:"→ Senden Sie uns Ihre Bilder: darvish.amir@gmx.de — wir aktualisieren die Galerie.",
+    stat1:"Installationen",stat2:"Jahre Erfahrung",stat3:"Kundenzufriedenheit",stat4:"Notdienst",
+    process_label:"So einfach geht's",process_title:"Ihr Weg zum perfekten Klima",
+    p1_title:"Beratung",p1_desc:"Kostenlose Erstberatung — wir analysieren Ihre Räume und Anforderungen.",
+    p2_title:"Planung",p2_desc:"Maßgeschneidertes Angebot mit optimalen Systemlösungen für Ihr Budget.",
+    p3_title:"Installation",p3_desc:"Fachgerechte Montage durch unser zertifiziertes Technikteam — sauber und pünktlich.",
+    p4_title:"Abnahme",p4_desc:"Vollständige Einweisung, Dokumentation und Übergabe mit Garantie.",
+    contact_label:"Kontakt",contact_title:"Sprechen Sie mit uns",
+    contact_sub:"Stellen Sie uns Ihre Fragen oder fordern Sie ein kostenloses Angebot an. Wir antworten innerhalb von 24 Stunden.",
+    form_name:"Name",form_phone_label:"Telefon",form_email:"E-Mail",form_service:"Leistung",form_msg:"Nachricht",form_submit:"Nachricht senden",
+    form_name_ph:"Max Mustermann",form_phone_ph:"017x xxxxxxx",form_email_ph:"ihre@email.de",form_msg_ph:"Beschreiben Sie Ihr Anliegen...",
+    form_select_default:"Bitte wählen",form_success:"Ihre Nachricht wurde gesendet. Wir melden uns bald!",
+    cinfo_title:"Direktkontakt",cinfo_sub:"Wir sind für Sie erreichbar",
+    cinfo_email_label:"E-Mail",cinfo_phone_label:"Telefon",cinfo_hours_label:"Öffnungszeiten",
+    cinfo_hours:"Mo–Fr: 08:00–18:00<br>Sa: 09:00–14:00",
+    cinfo_chat_label:"Live-Chat",cinfo_chat:"Klicken Sie auf den Chat-Button unten rechts",
+    footer_desc:"Klimatechnik der Zukunft — professionell, zuverlässig, energieeffizient.",
+    footer_services:"Leistungen",footer_company:"Unternehmen",footer_contact:"Kontakt",
+    footer_imprint:"Impressum",footer_privacy:"Datenschutz",
+    footer_copy:"© 2025 Coolify. Alle Rechte vorbehalten.",footer_tagline:"Klimatechnik der Zukunft"
+  },
+  en: {
+    nav_services:"Services",nav_products:"Products",nav_process:"Process",nav_contact:"Contact",nav_cta:"Request Quote",
+    hero_eyebrow:"Next-Generation Climate Technology",
+    hero_h1:"The Future of<br><span class='grad'>Climate Tech</span><br>Is Now.",
+    hero_sub:"Professional AC installation, maintenance, and repair. State-of-the-art technology for your perfect indoor climate — reliable, energy-efficient, future-proof.",
+    hero_cta1:"Get Free Consultation",hero_cta2:"Explore Services",
+    trust_1:"500+ Installations",trust_2:"10+ Years Experience",trust_3:"24/7 Emergency",
+    services_label:"Our Services",services_title:"What We Do For You",
+    services_sub:"From initial consultation to long-term support — we're with you at every step of your climate journey.",
+    s1_title:"Installation",s1_desc:"Precision installation of modern climate systems — split units, multi-split, VRF. End-to-end from planning to commissioning.",s1_tag:"Split · Multi-Split · VRF",
+    s2_title:"Maintenance & Service",s2_desc:"Regular inspection, filter cleaning, and performance testing for optimal efficiency and maximum lifespan.",s2_tag:"Inspection · Cleaning · Testing",
+    s3_title:"Repair",s3_desc:"Fast diagnosis and reliable repair of all defects — for minimal downtime and maximum comfort.",s3_tag:"Diagnosis · Repair · Emergency",
+    s4_title:"Consulting & Planning",s4_desc:"Individual energy consulting and tailored solutions for your spaces and budget.",s4_tag:"Energy Advice · Planning · Quote",
+    showcase_label:"Technology in Detail",showcase_title:"Indoor & Outdoor — Perfectly Matched",
+    showcase_sub:"Modern climate technology combines elegant indoor design with robust outdoor power.",
+    showcase_indoor:"Indoor Unit",showcase_indoor_sub:"Wall Mounted · Silent · Energy Efficient",
+    showcase_outdoor:"Outdoor Unit",showcase_outdoor_sub:"Compressor · Weatherproof · Powerful",
+    showcase_indoor_hint:"Your indoor unit photo here",showcase_outdoor_hint:"Your outdoor unit photo here",
+    showcase_note:"→ Send us your photos: darvish.amir@gmx.de — we'll update the gallery.",
+    stat1:"Installations",stat2:"Years Experience",stat3:"Customer Satisfaction",stat4:"Emergency",
+    process_label:"How It Works",process_title:"Your Path to Perfect Climate",
+    p1_title:"Consultation",p1_desc:"Free initial consultation — we analyze your space and requirements.",
+    p2_title:"Planning",p2_desc:"Custom quote with optimal system solutions for your budget.",
+    p3_title:"Installation",p3_desc:"Professional installation by our certified team — clean and on time.",
+    p4_title:"Handover",p4_desc:"Full briefing, documentation and handover with warranty.",
+    contact_label:"Contact",contact_title:"Talk to Us",
+    contact_sub:"Ask your questions or request a free quote. We respond within 24 hours.",
+    form_name:"Name",form_phone_label:"Phone",form_email:"Email",form_service:"Service",form_msg:"Message",form_submit:"Send Message",
+    form_name_ph:"John Smith",form_phone_ph:"+49 17x xxxxxxx",form_email_ph:"your@email.com",form_msg_ph:"Describe your needs...",
+    form_select_default:"Please select",form_success:"Your message has been sent. We'll be in touch soon!",
+    cinfo_title:"Direct Contact",cinfo_sub:"We're here for you",
+    cinfo_email_label:"Email",cinfo_phone_label:"Phone",cinfo_hours_label:"Opening Hours",
+    cinfo_hours:"Mon–Fri: 08:00–18:00<br>Sat: 09:00–14:00",
+    cinfo_chat_label:"Live Chat",cinfo_chat:"Click the chat button at the bottom right",
+    footer_desc:"Future-grade climate technology — professional, reliable, energy-efficient.",
+    footer_services:"Services",footer_company:"Company",footer_contact:"Contact",
+    footer_imprint:"Imprint",footer_privacy:"Privacy",
+    footer_copy:"© 2025 Coolify. All rights reserved.",footer_tagline:"Climate Technology of the Future"
+  }
+};
+
+// Chatbot knowledge
+const BOT = {
+  de: {
+    greet:"Hallo! Ich bin der Coolify-Assistent 👋 Ich helfe Ihnen gerne bei Fragen zu unseren Klimaanlagen-Leistungen. Womit kann ich helfen?",
+    installation:"Wir installieren Split-Anlagen, Multi-Split-Systeme und VRF-Systeme für Privat- und Geschäftskunden. Die Installation umfasst Planung, Montage, Befüllung und vollständige Inbetriebnahme. 📞 Für ein kostenloses Angebot: 0176 12345678",
+    wartung:"Unser Wartungsservice umfasst: Filterkontrolle & -reinigung, Kältemittelprüfung, Elektrokontrolle, Leistungstest und vollständige Dokumentation. Wir empfehlen eine jährliche Wartung. 🛡️",
+    reparatur:"Bei Störungen sind wir schnell zur Stelle! Wir bieten 24/7 Notdienst. Typische Reparaturen: Kältemittelleck, Kompressordefekt, Elektronikfehler, Vereisungsprobleme. Kontaktieren Sie uns: 0176 12345678",
+    preis:"Die Kosten hängen von Leistung, Raumgröße und System ab. Eine Standard-Split-Anlage (3,5 kW) beginnt ab ca. 1.500€ inkl. Installation. Wir erstellen Ihnen gerne ein kostenloses, individuelles Angebot!",
+    kontakt:"Sie erreichen uns unter:\n📧 darvish.amir@gmx.de\n📞 0176 12345678\nMo–Fr 08:00–18:00, Sa 09:00–14:00",
+    beratung:"Wir beraten Sie kostenlos bei der Auswahl des richtigen Klimasystems. Dabei berücksichtigen wir Raumgröße, Wärmedämmung, Nutzungsverhalten und Budget. Schreiben Sie uns!",
+    default:"Das kann ich Ihnen gerne beantworten! Am besten wenden Sie sich direkt an unsere Experten — via Telegram oder per Telefon: 0176 12345678."
+  },
+  en: {
+    greet:"Hello! I'm the Coolify assistant 👋 I'm happy to help with questions about our AC services. How can I assist?",
+    installation:"We install split units, multi-split systems, and VRF systems for residential and commercial clients. Installation includes planning, mounting, charging, and full commissioning. 📞 For a free quote: 0176 12345678",
+    wartung:"Our maintenance service includes: filter inspection & cleaning, refrigerant check, electrical inspection, performance test, and complete documentation. We recommend annual maintenance. 🛡️",
+    reparatur:"We respond quickly to breakdowns! We offer 24/7 emergency service. Typical repairs: refrigerant leaks, compressor failure, electronics errors, icing issues. Contact us: 0176 12345678",
+    preis:"Costs depend on capacity, room size, and system type. A standard split unit (3.5 kW) starts from approx. €1,500 incl. installation. We're happy to provide a free, customized quote!",
+    kontakt:"You can reach us at:\n📧 darvish.amir@gmx.de\n📞 0176 12345678\nMon–Fri 08:00–18:00, Sat 09:00–14:00",
+    beratung:"We offer free consultation for choosing the right climate system, considering room size, insulation, usage patterns, and budget. Write to us!",
+    default:"I'd be happy to answer that! Best to contact our experts directly — via Telegram or phone: 0176 12345678."
+  }
+};
+
+let currentLang = 'de';
+let chatOpen = false;
+let chatStarted = false;
+
+// ===== LANGUAGE =====
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.dataset.i18nPh;
+    if (T[lang][key] !== undefined) el.placeholder = T[lang][key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase());
+  });
+  document.getElementById('tgBtnText').textContent = lang === 'de'
+    ? 'Direkt via Telegram anschreiben' : 'Chat directly via Telegram';
+  document.querySelector('.chat-input').placeholder = lang === 'de'
+    ? 'Schreiben Sie uns...' : 'Write to us...';
+  const qs = document.querySelectorAll('.quick-btn');
+  if (lang === 'en') {
+    if(qs[0]) qs[0].textContent='Installation';
+    if(qs[1]) qs[1].textContent='Maintenance';
+    if(qs[2]) qs[2].textContent='Repair';
+    if(qs[3]) qs[3].textContent='Costs';
+  } else {
+    if(qs[0]) qs[0].textContent='Installation';
+    if(qs[1]) qs[1].textContent='Wartung';
+    if(qs[2]) qs[2].textContent='Reparatur';
+    if(qs[3]) qs[3].textContent='Kosten';
+  }
+}
+
+// ===== MOBILE MENU =====
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+}
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ===== SCROLL REVEAL =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== COUNTER =====
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 1600;
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(ease * target);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); counterObs.unobserve(e.target); }});
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+// ===== CHATBOT =====
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatWindow').classList.toggle('open', chatOpen);
+  document.getElementById('chatBadge').style.display = 'none';
+  if (chatOpen && !chatStarted) {
+    chatStarted = true;
+    setTimeout(() => addMsg('bot', BOT[currentLang].greet), 400);
+  }
+  if (chatOpen) setTimeout(() => document.getElementById('chatInput').focus(), 350);
+}
+
+function addMsg(role, text) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg msg-' + role;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function getReply(text) {
+  const t = text.toLowerCase();
+  const b = BOT[currentLang];
+  if (/install|montag|einbau|anlage|neu/.test(t)) return b.installation;
+  if (/wart|service|inspektion|maintenance|check|filter|pflege/.test(t)) return b.wartung;
+  if (/reparat|defekt|kaputt|störung|fehler|repair|broken|fix/.test(t)) return b.reparatur;
+  if (/preis|kosten|cost|price|angebot|quote|wie viel/.test(t)) return b.preis;
+  if (/kontakt|contact|telefon|email|phone|erreich/.test(t)) return b.kontakt;
+  if (/beratung|planun|consult|advice|frage|help|hilfe/.test(t)) return b.beratung;
+  return b.default;
+}
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addMsg('user', text);
+  input.value = '';
+  setTimeout(() => {
+    const reply = getReply(text);
+    addMsg('bot', reply);
+  }, 600);
+}
+
+function quickMsg(topic) {
+  const labels = {
+    de:{ installation:'Installation', wartung:'Wartung', reparatur:'Reparatur', preis:'Kosten' },
+    en:{ installation:'Installation', wartung:'Maintenance', reparatur:'Repair', preis:'Costs' }
+  };
+  const text = labels[currentLang][topic] || topic;
+  addMsg('user', text);
+  setTimeout(() => addMsg('bot', BOT[currentLang][topic] || BOT[currentLang].default), 500);
+}
+
+function openTelegram() {
+  window.open('https://t.me/Coolifiybot', '_blank');
+}
+
+// ===== CONTACT FORM =====
+function submitForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  // Send to backend if available, else fallback to mailto
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.fromEntries(data))
+  }).catch(() => {
+    // Fallback: open mailto
+    const fields = Array.from(form.querySelectorAll('input,textarea,select'));
+    const body = fields.map(f => `${f.placeholder||f.name}: ${f.value}`).join('\n');
+    window.location.href = `mailto:darvish.amir@gmx.de?subject=Anfrage%20von%20Coolify%20Website&body=${encodeURIComponent(body)}`;
+  });
+  document.getElementById('formSuccess').style.display = 'block';
+  form.reset();
+  setTimeout(() => { document.getElementById('formSuccess').style.display = 'none'; }, 5000);
+}
+
+// ===== SOCKET.IO LIVE CHAT (requires server.js running) =====
+let socket = null;
+function connectSocket() {
+  if (typeof io === 'undefined') return; // Socket.io not loaded
+  socket = io({ transports: ['websocket'], reconnectionAttempts: 3 });
+  socket.on('owner_reply', ({ text }) => {
+    addMsg('bot', text);
+    if (!chatOpen) {
+      document.getElementById('chatBadge').style.display = 'flex';
+      document.getElementById('chatBadge').textContent = '1';
+    }
+  });
+  socket.on('connect_error', () => { socket = null; });
+}
+
+// Override sendMsg to also send via socket when connected
+const _origSendMsg = sendMsg;
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addMsg('user', text);
+  input.value = '';
+  if (socket && socket.connected) {
+    socket.emit('visitor_msg', { text, name: 'Besucher' });
+  } else {
+    setTimeout(() => addMsg('bot', getReply(text)), 600);
+  }
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  setLang('de');
+  connectSocket();
+  setTimeout(() => {
+    if (!chatOpen) document.getElementById('chatBadge').style.display = 'flex';
+  }, 3000);
+});
+</script>
+</body>
+</html>
